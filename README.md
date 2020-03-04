@@ -3,4 +3,5 @@ applet for logging timesheets and calculating tasks durations
 
 To do:  
 Add unit testing  
-Refactor code in buttons into class and functions
+Refactor code in buttons into class and functions  
+Add better exception catch and throw
