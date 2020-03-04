@@ -23,18 +23,19 @@
 
         <Button x:Name="btnNewSheet" Grid.Row="0" Click="btnNewSheet_Click" Margin="30,15,0,0" FontSize="14" Height="28" VerticalAlignment="Top" HorizontalAlignment="Left" Width="79" Grid.ColumnSpan="2" >New Sheet</Button>
         <Button x:Name="btnLoadSheet" Grid.Row="0" Grid.Column="1" Click="btnLoadSheet_Click" Margin="20,15,0,0" FontSize="14" Height="28" VerticalAlignment="Top" HorizontalAlignment="Left" Width="79" Grid.ColumnSpan="2">Load Sheet</Button>
+ 
+        <TextBlock x:Name="sheetDate" HorizontalAlignment="Left" Margin="33,18,0,8" TextWrapping="Wrap" VerticalAlignment="Center" Width="131" FontSize="16" Height="24" Grid.Column="2" Grid.ColumnSpan="2"/>        
+        <TextBlock x:Name="statusMsg" HorizontalAlignment="Right" Margin="0,0,22,7" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Bottom" Height="26" Width="124" Grid.ColumnSpan="2" Grid.Column="2" TextAlignment="Center" FontSize="10"/>
 
-        <!--Task input-->
         <TextBlock HorizontalAlignment="Left" Margin="30,7,0,0" Grid.Row="1" TextWrapping="Wrap" Text="What are you working on?" VerticalAlignment="Top" Grid.ColumnSpan="3" Width="203" Height="24" FontWeight="Bold" FontSize="16"/>
-        <!--Timesheet date-->
-
         <TextBox x:Name="txtTaskInput" Grid.ColumnSpan="4" HorizontalAlignment="Left" Height="27" Margin="30,6,0,0" Grid.Row="2" TextWrapping="Wrap" VerticalAlignment="Top" Width="335" FontSize="14"></TextBox>
-
+        
+        <Button x:Name="btnCalc" Content="Calculate" HorizontalAlignment="Left" Margin="30,4,0,0" Grid.Row="3" VerticalAlignment="Top" Width="78" Height="28" Grid.ColumnSpan="2" FontSize="14" Click="btnCalc_Click"/>
         <Button x:Name="btnSave" Grid.Column="1" HorizontalAlignment="Left" Margin="97,4,0,0" Grid.Row="3" VerticalAlignment="Top" Width="78" Height="28" Click="btnSave_Click" FontSize="14" Grid.ColumnSpan="2">Save</Button>
         <Button x:Name="btnCancel" Grid.Column="2" HorizontalAlignment="Left" Margin="87,4,0,0" Grid.Row="3" VerticalAlignment="Top" Width="78" Height="28" Click="btnCancel_Click" IsCancel="True" Grid.ColumnSpan="2" FontSize="14">Cancel</Button>
-        <TextBlock x:Name="sheetDate" HorizontalAlignment="Left" Margin="33,18,0,8" TextWrapping="Wrap" VerticalAlignment="Center" Width="131" FontSize="16" Height="24" Grid.Column="2" Grid.ColumnSpan="2"/>
-        <TextBlock x:Name="statusMsg" HorizontalAlignment="Right" Margin="0,0,22,7" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Bottom" Height="26" Width="124" Grid.ColumnSpan="2" Grid.Column="2" TextAlignment="Center" FontSize="10"/>
-        <Button x:Name="btnCalc" Content="Calculate" HorizontalAlignment="Left" Margin="107,4,0,0" Grid.Row="3" VerticalAlignment="Top" Width="78" Height="28" Grid.ColumnSpan="2" FontSize="14" Click="btnCalc_Click"/>
+
+
+
 
 
 

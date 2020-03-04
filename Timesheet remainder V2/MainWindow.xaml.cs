@@ -32,7 +32,7 @@ namespace Timesheet_remainder
         string sheetDay = DateTime.Now.ToString("dd/MM/yy");
         string sheetTime = DateTime.Now.ToString("HH:mm:ss");
 
-        int counter = 0;
+        int popupCounter = 0;
 
         private static Timer aTimer;
 
@@ -41,11 +41,11 @@ namespace Timesheet_remainder
             InitializeComponent();
 
 
-            //sets sheetDate text block to the current time
+            //Sets sheetDate text block to the current time
             sheetDate.Text = DateTime.Now.ToString("dd/MM/yy   HH:mm");
 
 
-            //sets status to no file load
+            //Sets status to no file load
 
             statusMsg.Foreground = System.Windows.Media.Brushes.Red;
             statusMsg.Text = "Timesheet not loaded";
@@ -77,7 +77,7 @@ namespace Timesheet_remainder
             //System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName;
             ni.Visible = true;
 
-            //maximuise when double click            
+            //Maximise when double click            
             ni.Click +=
                 delegate (object sender, EventArgs args)
                 {
@@ -86,7 +86,7 @@ namespace Timesheet_remainder
                 };
         }
 
-        //State change event
+        //State change events minimise to hide window
         protected override void OnStateChanged(EventArgs e)
         {
             if (WindowState == System.Windows.WindowState.Minimized)
@@ -109,19 +109,19 @@ namespace Timesheet_remainder
                 sheetTime = DateTime.Now.ToString("HH:mm:ss");
                 //Autopopup at set minutes
                 if (currentTime.Minute == 30 | currentTime.Minute == 00)
-                {
-                    if (counter == 0)
+                {                    
+                    if (popupCounter == 0)
                     {                        
                         this.Show();
                         this.WindowState = WindowState.Normal;                       
-                        counter += 1;
-                        Console.WriteLine("autopopup triggered, counter= " + counter.ToString() + ", Time = " + currentTime.Minute.ToString()); //debug
+                        popupCounter += 1;
+                        Console.WriteLine("autopopup triggered, counter= " + popupCounter.ToString() + ", Time = " + currentTime.Minute.ToString()); //debug
                     }                                                           
-                    Console.WriteLine(counter.ToString()); //debug
+                    //Console.WriteLine(counter.ToString()); //debug output for 
                 } 
                 else
                 {
-                    counter = 0;
+                    popupCounter = 0;
                 }             
             });
         }
@@ -240,7 +240,7 @@ namespace Timesheet_remainder
             this.WindowState = WindowState.Minimized;
         }
 
-        public class Tasks
+/*        public class Tasks
         {
             public string CalcTask { get; set; }
             public double CalcTime { get; set; }
@@ -250,134 +250,146 @@ namespace Timesheet_remainder
                 CalcTask = calcTask;
                 CalcTime = calcTime;
             }    
-        }
+        }*/
 
 
         private void btnCalc_Click(object sender, RoutedEventArgs e)
         {
             if (loadPath != string.Empty && statusMsg.Text != "Invalid operation")
             {
-                var fi = new FileInfo(@loadPath);
-                using (var p = new ExcelPackage(fi))
+                try
                 {
-
-                    
-                    List<Object> instanceList = new List<Object>();
-
-                    var wsTimes = p.Workbook.Worksheets["MySheet"];
-                    var wsTimesStart = wsTimes.Dimension.Start;
-                    var wsTimesEnd = wsTimes.Dimension.End;
-
-                    //this needs refactoring to import straight to the datatable
-                    for (int row = wsTimesStart.Row + 1; row <= wsTimesEnd.Row; row++)
+                    var fi = new FileInfo(@loadPath);
+                    using (var p = new ExcelPackage(fi))
                     {
-                        instanceList.Add(wsTimes.Cells[row, 1].Value);
-                        instanceList.Add(wsTimes.Cells[row, 2].Value);
-                        instanceList.Add(wsTimes.Cells[row, 3].Value);
-                    }
 
 
-                    //mainly used for debug not output to excel file
-                    //List<Object> calcList = new List<Object>();
-                    /*                    string taskDate;
-                                        string nextTaskDate;
-                                        string taskTime;
-                                        string nextTaskTime;
-                                        TimeSpan calcTaskTime;
-                                        string taskDesc;
-                                        string nextTaskDesc;
-                                        */
-                    /*                    for (int order = 0; order <= instanceList.Count; order += 3)
-                                        {
+                        List<Object> instanceList = new List<Object>();
+
+                        var wsTimes = p.Workbook.Worksheets["MySheet"];
+                        var wsTimesStart = wsTimes.Dimension.Start;
+                        var wsTimesEnd = wsTimes.Dimension.End;
+
+                        //this needs refactoring to import straight to the datatable
+                        for (int row = wsTimesStart.Row + 1; row <= wsTimesEnd.Row; row++)
+                        {
+                            instanceList.Add(wsTimes.Cells[row, 1].Value);
+                            instanceList.Add(wsTimes.Cells[row, 2].Value);
+                            instanceList.Add(wsTimes.Cells[row, 3].Value);
+                        }
 
 
-                                            if (instanceList.Count >= order + 5)
+                        //mainly used for debug not output to excel file
+                        //List<Object> calcList = new List<Object>();
+                        /*                    string taskDate;
+                                            string nextTaskDate;
+                                            string taskTime;
+                                            string nextTaskTime;
+                                            TimeSpan calcTaskTime;
+                                            string taskDesc;
+                                            string nextTaskDesc;
+                                            */
+                        /*                    for (int order = 0; order <= instanceList.Count; order += 3)
                                             {
-                                                taskDate = (string)instanceList[order];
-                                                taskTime = (string)instanceList[order + 1];
-                                                taskDesc = (string)instanceList[order + 2];
-                                                nextTaskDate = (string)instanceList[order + 3];
-                                                nextTaskTime = (string)instanceList[order + 4];
-                                                nextTaskDesc = (string)instanceList[order + 5];
 
-                                                if (nextTaskDate != null && nextTaskTime != null && nextTaskDesc != null)
+
+                                                if (instanceList.Count >= order + 5)
                                                 {
-                                                    //if  (taskDesc == nextTaskDesc && taskDate == nextTaskDate)
-                                                    if (taskDate == nextTaskDate)
+                                                    taskDate = (string)instanceList[order];
+                                                    taskTime = (string)instanceList[order + 1];
+                                                    taskDesc = (string)instanceList[order + 2];
+                                                    nextTaskDate = (string)instanceList[order + 3];
+                                                    nextTaskTime = (string)instanceList[order + 4];
+                                                    nextTaskDesc = (string)instanceList[order + 5];
+
+                                                    if (nextTaskDate != null && nextTaskTime != null && nextTaskDesc != null)
                                                     {
-                                                        calcList.Add(taskDesc);
-                                                        calcTaskTime = DateTime.Parse(nextTaskTime).Subtract(DateTime.Parse(taskTime));
-                                                        calcList.Add(calcTaskTime);
-                                                        Console.WriteLine("taskDecs =" + taskDesc + " calcTaskTime =" + calcTaskTime);
+                                                        //if  (taskDesc == nextTaskDesc && taskDate == nextTaskDate)
+                                                        if (taskDate == nextTaskDate)
+                                                        {
+                                                            calcList.Add(taskDesc);
+                                                            calcTaskTime = DateTime.Parse(nextTaskTime).Subtract(DateTime.Parse(taskTime));
+                                                            calcList.Add(calcTaskTime);
+                                                            Console.WriteLine("taskDecs =" + taskDesc + " calcTaskTime =" + calcTaskTime);
+                                                        }
                                                     }
                                                 }
-                                            }
-                                        }*/
+                                            }*/
 
-                    DataTable inputTable = new DataTable("inputTable1");
-                    inputTable.Clear();
-                    inputTable.Columns.Add("Date");
-                    inputTable.Columns.Add("Time");
-                    inputTable.Columns.Add("TaskDesc");
-                    for (int order = 0; order <= instanceList.Count - 2; order += 3)
-                    {
-                        DataRow _task = inputTable.NewRow();
-                        _task["Date"] = Convert.ToString(instanceList[order]);
-                        _task["Time"] = Convert.ToString(instanceList[order + 1]);
-                        _task["TaskDesc"] = Convert.ToString(instanceList[order + 2]);
-                        inputTable.Rows.Add(_task);
-                    }
-                    //inputTable.WriteXml(@"C:\Users\Ben\Desktop\Timesheet test\calcTest\inputTable.xml");
-
-                    DataTable calcTable = new DataTable("calcTable1");
-                    calcTable.Clear();
-                    calcTable.Columns.Add("Date");
-                    calcTable.Columns.Add("Task");
-                    calcTable.Columns.Add("Duration");
-                    for (int i = 0; i < inputTable.Rows.Count - 1; i++)
-                    {
-                        // Compare with previous row using index
-                        if (inputTable.Rows[i]["Date"] == inputTable.Rows[i + 1]["Date"])
+                        DataTable inputTable = new DataTable("inputTable1");
+                        inputTable.Clear();
+                        inputTable.Columns.Add("Date");
+                        inputTable.Columns.Add("Time");
+                        inputTable.Columns.Add("TaskDesc");
+                        for (int order = 0; order <= instanceList.Count - 2; order += 3)
                         {
-                            DataRow _calcRow = calcTable.NewRow();
-                            _calcRow["Date"] = inputTable.Rows[i]["Date"];
-                            _calcRow["Task"] = inputTable.Rows[i]["TaskDesc"];
-                            _calcRow["Duration"] = (DateTime.Parse((string)inputTable.Rows[i + 1]["Time"]).Subtract(DateTime.Parse((string)inputTable.Rows[i]["Time"]))).TotalMinutes;
-                            calcTable.Rows.Add(_calcRow);
+                            DataRow _task = inputTable.NewRow();
+                            _task["Date"] = Convert.ToString(instanceList[order]);
+                            _task["Time"] = Convert.ToString(instanceList[order + 1]);
+                            _task["TaskDesc"] = Convert.ToString(instanceList[order + 2]);
+                            inputTable.Rows.Add(_task);
                         }
-                    }
-                    //sort table in terms of date then tasks using linq
-                    DataTable sortCalcTable = new DataTable();
-                    sortCalcTable.Clear();
-                    sortCalcTable = calcTable.AsEnumerable()
-                        .OrderBy(r => r.Field<string>("Date"))
-                        .ThenBy(r => r.Field<string>("Task"))
-                        .CopyToDataTable();
-                    sortCalcTable.TableName = "sortCalcTable1";
-                    sortCalcTable.WriteXml(@"C:\Users\Ben\Desktop\Timesheet test\calcTest\calcTable.xml");
+                        //inputTable.WriteXml(@"C:\Users\Ben\Desktop\Timesheet test\calcTest\inputTable.xml");
 
-                    //output table
-                    DataTable outTable = new DataTable("OutputTable1");
-                    outTable.Clear();
-                    outTable.Columns.Add("Date");
-                    outTable.Columns.Add("Task");
-                    outTable.Columns.Add("TotalTime");
-                    outTable.Columns.Add("TotalDuration", typeof(int));
-
-                    //generate rows with unique tasks each 
-                    DataRow _outRow1st = outTable.NewRow();
-                    _outRow1st["Date"] = sortCalcTable.Rows[0]["Date"];
-                    _outRow1st["Task"] = sortCalcTable.Rows[0]["Task"];
-                    _outRow1st["TotalDuration"] = 0;
-                    outTable.Rows.Add(_outRow1st);
-                    //int j = 0; //iterator for outtable
-                    int sum = 0;
-                    TimeSpan ts;
-                    for (int i = 0; i < sortCalcTable.Rows.Count; i++) //iterator for sortCalctable
-                    {
-                        if (sortCalcTable.Rows[i]["Date"] == outTable.Rows[outTable.Rows.Count - 1]["Date"])
+                        DataTable calcTable = new DataTable("calcTable1");
+                        calcTable.Clear();
+                        calcTable.Columns.Add("Date");
+                        calcTable.Columns.Add("Task");
+                        calcTable.Columns.Add("Duration");
+                        for (int i = 0; i < inputTable.Rows.Count - 1; i++)
                         {
-                            if (sortCalcTable.Rows[i]["Task"] != outTable.Rows[outTable.Rows.Count - 1]["Task"])
+                            // Compare with previous row using index
+                            if (inputTable.Rows[i]["Date"] == inputTable.Rows[i + 1]["Date"])
+                            {
+                                DataRow _calcRow = calcTable.NewRow();
+                                _calcRow["Date"] = inputTable.Rows[i]["Date"];
+                                _calcRow["Task"] = inputTable.Rows[i]["TaskDesc"];
+                                _calcRow["Duration"] = (DateTime.Parse((string)inputTable.Rows[i + 1]["Time"]).Subtract(DateTime.Parse((string)inputTable.Rows[i]["Time"]))).TotalMinutes;
+                                calcTable.Rows.Add(_calcRow);
+                            }
+                        }
+                        //sort table in terms of date then tasks using linq
+                        DataTable sortCalcTable = new DataTable();
+                        sortCalcTable.Clear();
+                        sortCalcTable = calcTable.AsEnumerable()
+                            .OrderBy(r => r.Field<string>("Date"))
+                            .ThenBy(r => r.Field<string>("Task"))
+                            .CopyToDataTable();
+                        sortCalcTable.TableName = "sortCalcTable1";
+                        sortCalcTable.WriteXml(@"C:\Users\Ben\Desktop\Timesheet test\calcTest\calcTable.xml");
+
+                        //output table
+                        DataTable outTable = new DataTable("OutputTable1");
+                        outTable.Clear();
+                        outTable.Columns.Add("Date");
+                        outTable.Columns.Add("Task");
+                        outTable.Columns.Add("TotalTime");
+                        outTable.Columns.Add("TotalDuration", typeof(int));
+
+                        //generate rows with unique tasks each 
+                        DataRow _outRow1st = outTable.NewRow();
+                        _outRow1st["Date"] = sortCalcTable.Rows[0]["Date"];
+                        _outRow1st["Task"] = sortCalcTable.Rows[0]["Task"];
+                        _outRow1st["TotalDuration"] = 0;
+                        outTable.Rows.Add(_outRow1st);
+                        //int j = 0; //iterator for outtable
+                        int sum = 0;
+                        TimeSpan ts;
+                        for (int i = 0; i < sortCalcTable.Rows.Count; i++) //iterator for sortCalctable
+                        {
+                            if (sortCalcTable.Rows[i]["Date"] == outTable.Rows[outTable.Rows.Count - 1]["Date"])
+                            {
+                                if (sortCalcTable.Rows[i]["Task"] != outTable.Rows[outTable.Rows.Count - 1]["Task"])
+                                {
+                                    DataRow _outRow = outTable.NewRow();
+                                    _outRow["Date"] = sortCalcTable.Rows[i]["Date"];
+                                    _outRow["Task"] = sortCalcTable.Rows[i]["Task"];
+                                    _outRow["TotalDuration"] = 0;
+                                    _outRow["TotalTime"] = 0;
+                                    outTable.Rows.Add(_outRow);
+                                }
+                            }
+                            else
                             {
                                 DataRow _outRow = outTable.NewRow();
                                 _outRow["Date"] = sortCalcTable.Rows[i]["Date"];
@@ -386,48 +398,47 @@ namespace Timesheet_remainder
                                 _outRow["TotalTime"] = 0;
                                 outTable.Rows.Add(_outRow);
                             }
-                        }
-                        else
-                        {
-                            DataRow _outRow = outTable.NewRow();
-                            _outRow["Date"] = sortCalcTable.Rows[i]["Date"];
-                            _outRow["Task"] = sortCalcTable.Rows[i]["Task"];
-                            _outRow["TotalDuration"] = 0;
-                            _outRow["TotalTime"] = 0;
-                            outTable.Rows.Add(_outRow);
+
+                            if (sortCalcTable.Rows[i]["Date"] == outTable.Rows[outTable.Rows.Count - 1]["Date"]
+                                && sortCalcTable.Rows[i]["Task"] == outTable.Rows[outTable.Rows.Count - 1]["Task"])
+                            {
+                                sum = Convert.ToInt32(outTable.Rows[outTable.Rows.Count - 1]["TotalDuration"])
+                                    + Convert.ToInt32(sortCalcTable.Rows[i]["Duration"]);
+                                ts = TimeSpan.FromMinutes(sum);
+                                DataRow _outRow = outTable.Rows[outTable.Rows.Count - 1];
+                                _outRow["TotalDuration"] = sum;
+                                _outRow["TotalTime"] = ts.ToString("hh\\:mm");
+
+                                sum = 0;
+                            }
                         }
 
-                        if (sortCalcTable.Rows[i]["Date"] == outTable.Rows[outTable.Rows.Count - 1]["Date"]
-                            && sortCalcTable.Rows[i]["Task"] == outTable.Rows[outTable.Rows.Count - 1]["Task"])
-                        {
-                            sum = Convert.ToInt32(outTable.Rows[outTable.Rows.Count - 1]["TotalDuration"])
-                                + Convert.ToInt32(sortCalcTable.Rows[i]["Duration"]);
-                            ts = TimeSpan.FromMinutes(sum);
-                            DataRow _outRow = outTable.Rows[outTable.Rows.Count - 1];
-                            _outRow["TotalDuration"] = sum;
-                            _outRow["TotalTime"] = ts.ToString("hh\\:mm");
+                        //outTable.WriteXml(@"C:\Users\Ben\Desktop\Timesheet test\calcTest\outTable.xml");
 
-                            sum = 0;
-                        }
-                    }
-                    //outTable.WriteXml(@"C:\Users\Ben\Desktop\Timesheet test\calcTest\outTable.xml");
+                        //export datatable to excel sheet
 
-                    //export datatable to excel sheet
-                    try
-                    {
+
                         var wsCalc = p.Workbook.Worksheets.Add("Calculated_Times");
                         wsCalc.Cells["A1"].LoadFromDataTable(outTable, true);
                         wsCalc.DeleteColumn(4);
                         p.Save();
-                        statusMsg.Text = string.Empty;
-                    }
-                    catch
-                    {
-                        statusMsg.Foreground = System.Windows.Media.Brushes.Red;
-                        statusMsg.Text = "Invalid operation, delete old calculated sheet";
+
+                        statusMsg.Foreground = System.Windows.Media.Brushes.Green;
+                        statusMsg.Text = "Calculation completed";
                     }
 
-                }            
+                }
+                catch
+                {
+                    statusMsg.Foreground = System.Windows.Media.Brushes.Red;
+                    statusMsg.Text = "Invalid operation, calculation failed";
+                }
+
+            }            
+             else
+            {
+                statusMsg.Foreground = System.Windows.Media.Brushes.Red;
+                statusMsg.Text = "Invalid operation";
             }
         }
     }
