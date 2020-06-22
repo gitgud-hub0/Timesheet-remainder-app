@@ -98,54 +98,55 @@ namespace Timesheet_remainder
             }
         }
 
-        #region Popup Management
+        #region Timed Management
         private void NewTimer()
         {
-            // Create a timer and set a 20 s interval.
             var timer = new System.Timers.Timer();
-            const int intervalSeconds = 20 * 1000;
+            const int intervalSeconds = 1 * 1000;
             timer.Interval = intervalSeconds;
-
-            // Hook up the Elapsed event for the timer. 
-            timer.Elapsed += TimedPopupEvent;
-
-            // Have the timer fire repeated events (true is the default)
+            timer.Elapsed += TimedEvents;
             timer.AutoReset = true;
-
-            // Start the timer
             timer.Enabled = true;
         }
 
-        private void TimedPopupEvent(Object source, System.Timers.ElapsedEventArgs e)
+        private void TimedEvents(Object source, System.Timers.ElapsedEventArgs e)
         {
             //Console.WriteLine("The Elapsed event was raised at {0}", e.SignalTime);  //use for debug
-            DateTime currentTime = DateTime.Now;
-            
             this.Dispatcher.Invoke(() =>
             {
-                sheetDate.Text = DateTime.Now.ToString("dd/MM/yy   HH:mm");
-                _sheetDateTime = DateTime.Now;
-
-                //Autopopup at set minutes
-                if (currentTime.Minute == 30 | currentTime.Minute == 00)
-                {                    
-                    if (_popupCounter == 0)
-                    {                        
-                        this.Show();
-                        this.WindowState = WindowState.Normal;                       
-                        _popupCounter += 1;
-
-                        var debugString =
-                            $"timed popup triggered at Time = {currentTime.Minute}, counter = {_popupCounter}"; 
-                        Console.WriteLine(debugString);
-                    }                                                           
-                    //Console.WriteLine(counter.ToString()); //debug output for 
-                } 
-                else
-                {
-                    _popupCounter = 0;
-                }             
+                UpdateTimes();
+                AutoPopupAtTime();
             });
+        }
+
+        private void UpdateTimes()
+        {
+            sheetDate.Text = DateTime.Now.ToString("dd/MM/yy HH:mm:ss");
+            _sheetDateTime = DateTime.Now;
+        }
+
+        private void AutoPopupAtTime()
+        {
+            DateTime currentTime = DateTime.Now;
+            if (currentTime.Minute == 30 | currentTime.Minute == 00)
+            {
+                if (_popupCounter == 0)
+                {
+                    this.Show();
+                    this.WindowState = WindowState.Normal;
+                    _popupCounter += 1;
+
+                    var debugString =
+                        $"timed popup triggered at Time = {currentTime.Minute}, counter = {_popupCounter}";
+                    Console.WriteLine(debugString);
+                }
+
+                //Console.WriteLine(counter.ToString()); //debug output for 
+            }
+            else
+            {
+                _popupCounter = 0;
+            }
         }
 
         protected override void OnStateChanged(EventArgs e)
