@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using OfficeOpenXml;
+using System;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using OfficeOpenXml;
 
 namespace Timesheet_remainder
 {
-    public class ExcelManager
+    public class ExcelController
     {
         public void NewExcelFile(string fileLoadPath)
         {
@@ -29,7 +25,6 @@ namespace Timesheet_remainder
             {
                 var worksheet = excelPackage.Workbook.Worksheets["MySheet"];
                 var lastRow = worksheet.Dimension.End.Row;
-                var lastColumn = worksheet.Dimension.End.Column;
 
                 //Set the next last cell in the row to sheetDate.Text
                 worksheet.Cells[lastRow + 1, 1].Value = sheetDateTime.ToString("dd/MM/yy");
