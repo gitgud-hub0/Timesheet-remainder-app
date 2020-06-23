@@ -11,10 +11,10 @@ namespace Timesheet_remainder
             var inputTable = PopulateInputTable(instanceList);
 
             var sortCalcTable = SortCalcTable(inputTable);
-            //sortCalcTable.WriteXml(@"C:\Users\Ben\Desktop\Timesheet test\calcTest\calcTable.xml");
+            sortCalcTable.WriteXml(@"C:\Users\Ben\Desktop\Timesheet test\calcTest\calcTable.xml");
 
             var outTable = PopulateOutputTable(sortCalcTable);
-            //outTable.WriteXml(@"C:\Users\Ben\Desktop\Timesheet test\calcTest\outTable.xml");
+            outTable.WriteXml(@"C:\Users\Ben\Desktop\Timesheet test\calcTest\outTable.xml");
 
             return outTable;
         }
@@ -93,15 +93,17 @@ namespace Timesheet_remainder
             //int j = 0; //iterator for outtable
             for (int i = 0; i < sortCalcTable.Rows.Count; i++) //iterator for sortCalctable
             {
-                if (sortCalcTable.Rows[i]["Date"] == outTable.Rows[outTable.Rows.Count - 1]["Date"]
-                    && sortCalcTable.Rows[i]["Task"] != outTable.Rows[outTable.Rows.Count - 1]["Task"])
+                if (sortCalcTable.Rows[i]["Date"] == outTable.Rows[outTable.Rows.Count - 1]["Date"])
                 {
-                    DataRow outRow = outTable.NewRow();
-                    outRow["Date"] = sortCalcTable.Rows[i]["Date"];
-                    outRow["Task"] = sortCalcTable.Rows[i]["Task"];
-                    outRow["TotalDuration"] = 0;
-                    outRow["TotalTime"] = 0;
-                    outTable.Rows.Add(outRow);
+                    if (sortCalcTable.Rows[i]["Task"] != outTable.Rows[outTable.Rows.Count - 1]["Task"])
+                    {
+                        DataRow outRow = outTable.NewRow();
+                        outRow["Date"] = sortCalcTable.Rows[i]["Date"];
+                        outRow["Task"] = sortCalcTable.Rows[i]["Task"];
+                        outRow["TotalDuration"] = 0;
+                        outRow["TotalTime"] = 0;
+                        outTable.Rows.Add(outRow);
+                    }
                 }
                 else
                 {
