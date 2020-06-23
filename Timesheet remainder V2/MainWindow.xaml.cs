@@ -199,26 +199,38 @@ namespace Timesheet_remainder
 
         }
 
+        private void btnBreak_Click(object sender, RoutedEventArgs e)
+        {
+            if (_fileLoadPath != string.Empty && statusMsg.Text != "Invalid operation")
+            {
+                try
+                {
+                    _excelController.AddNewEntryToWorkSheet(_fileLoadPath, _sheetDateTime, "Break");
+                    statusMsg.Text = string.Empty;
+                    this.WindowState = WindowState.Minimized;
+                }
+                catch
+                {
+                    statusMsg.Foreground = System.Windows.Media.Brushes.Red;
+                    statusMsg.Text = "Invalid operation";
+                }
+            }
+        }
+
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {
             if (_fileLoadPath != string.Empty && statusMsg.Text != "Invalid operation")
             {
-                var fileInfoPath = new FileInfo(_fileLoadPath);
-
-                using (var excelPackage = new ExcelPackage(fileInfoPath))
+                try
                 {
-
-                    try
-                    {
-                        _excelController.AddNewEntryToWorkSheet(_fileLoadPath, _sheetDateTime, txtTaskInput.Text);
-                        statusMsg.Text = string.Empty;
-                        this.WindowState = WindowState.Minimized;
-                    }
-                    catch
-                    {
-                        statusMsg.Foreground = System.Windows.Media.Brushes.Red;
-                        statusMsg.Text = "Invalid operation";
-                    }
+                    _excelController.AddNewEntryToWorkSheet(_fileLoadPath, _sheetDateTime, txtTaskInput.Text);
+                    statusMsg.Text = string.Empty;
+                    this.WindowState = WindowState.Minimized;
+                }
+                catch
+                {
+                    statusMsg.Foreground = System.Windows.Media.Brushes.Red;
+                    statusMsg.Text = "Invalid operation";
                 }
             }
         }
@@ -242,6 +254,7 @@ namespace Timesheet_remainder
             }
         }
         #endregion
+
     }
 }
 

@@ -5,8 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Timesheet_remainder"
         mc:Ignorable="d"
-        Title="Timesheet Remainder" Height="210.667" Width="400" ResizeMode="CanMinimize">
-    <Grid>
+        Title="Timesheet Remainder" Height="192.787" Width="400" ResizeMode="CanMinimize">
+    <Grid Margin="0,0,0,1">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="50*" />
             <ColumnDefinition Width="50*" />
@@ -21,18 +21,20 @@
             <RowDefinition Height="45*" />
         </Grid.RowDefinitions>
 
-        <Button x:Name="btnNewSheet" Grid.Row="0" Click="btnNewSheet_Click" Margin="30,15,0,0" FontSize="14" Height="28" VerticalAlignment="Top" HorizontalAlignment="Left" Width="79" Grid.ColumnSpan="2" >New Sheet</Button>
-        <Button x:Name="btnLoadSheet" Grid.Row="0" Grid.Column="1" Click="btnLoadSheet_Click" Margin="20,15,0,0" FontSize="14" Height="28" VerticalAlignment="Top" HorizontalAlignment="Left" Width="79" Grid.ColumnSpan="2">Load Sheet</Button>
- 
-        <TextBlock x:Name="sheetDate" HorizontalAlignment="Left" Margin="33,18,0,8" TextWrapping="Wrap" VerticalAlignment="Center" Width="131" FontSize="16" Height="24" Grid.Column="2" Grid.ColumnSpan="2"/>        
+        <Button x:Name="btnNewSheet" Grid.Row="0" Click="btnNewSheet_Click" Margin="17,10,0,0" FontSize="14" Height="28" VerticalAlignment="Top" HorizontalAlignment="Left" Width="79" >New Sheet</Button>
+        <Button x:Name="btnLoadSheet" Grid.Row="0" Grid.Column="1" Click="btnLoadSheet_Click" Margin="12,10,0,0" FontSize="14" Height="28" VerticalAlignment="Top" HorizontalAlignment="Left" Width="79">Load Sheet</Button>
+
+        <TextBlock x:Name="sheetDate" HorizontalAlignment="Left" Margin="33,18,0,8" TextWrapping="Wrap" VerticalAlignment="Center" Width="131" FontSize="16" Height="24" Grid.Column="2" Grid.ColumnSpan="2"/>
         <TextBlock x:Name="statusMsg" HorizontalAlignment="Right" Margin="0,0,22,7" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Bottom" Height="26" Width="124" Grid.ColumnSpan="2" Grid.Column="2" TextAlignment="Center" FontSize="10"/>
 
-        <TextBlock HorizontalAlignment="Left" Margin="30,7,0,0" Grid.Row="1" TextWrapping="Wrap" Text="What are you working on?" VerticalAlignment="Top" Grid.ColumnSpan="3" Width="203" Height="24" FontWeight="Bold" FontSize="16"/>
-        <TextBox x:Name="txtTaskInput" Grid.ColumnSpan="4" HorizontalAlignment="Left" Height="27" Margin="30,6,0,0" Grid.Row="2" TextWrapping="Wrap" VerticalAlignment="Top" Width="335" FontSize="14"></TextBox>
-        
-        <Button x:Name="btnCalc" Content="Calculate" HorizontalAlignment="Left" Margin="30,4,0,0" Grid.Row="3" VerticalAlignment="Top" Width="78" Height="28" Grid.ColumnSpan="2" FontSize="14" Click="btnCalc_Click"/>
-        <Button x:Name="btnSave" Grid.Column="1" HorizontalAlignment="Left" Margin="97,4,0,0" Grid.Row="3" VerticalAlignment="Top" Width="78" Height="28" Click="btnSave_Click" FontSize="14" Grid.ColumnSpan="2">Save</Button>
-        <Button x:Name="btnCancel" Grid.Column="2" HorizontalAlignment="Left" Margin="87,4,0,0" Grid.Row="3" VerticalAlignment="Top" Width="78" Height="28" Click="btnCancel_Click" IsCancel="True" Grid.ColumnSpan="2" FontSize="14">Cancel</Button>
+        <TextBlock HorizontalAlignment="Left" Margin="30,6,0,0" Grid.Row="1" TextWrapping="Wrap" Text="What are you working on?" VerticalAlignment="Top" Grid.ColumnSpan="3" Width="203" Height="24" FontWeight="Bold" FontSize="16"/>
+        <TextBox x:Name="txtTaskInput" Grid.ColumnSpan="4" Height="27" Margin="17,5,15,0" Grid.Row="2" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="14"/>
+
+        <Button x:Name="btnCalc" Content="Calculate" HorizontalAlignment="Left" Margin="17,4,0,0" Grid.Row="3" VerticalAlignment="Top" Width="78" Height="28" FontSize="14" Click="btnCalc_Click"/>
+        <Button x:Name="btnSave" Grid.Column="2" HorizontalAlignment="Left" Margin="9,4,0,0" Grid.Row="3" VerticalAlignment="Top" Width="78" Height="28" Click="btnSave_Click" FontSize="14">Save</Button>
+        <Button x:Name="btnCancel" Grid.Column="3" HorizontalAlignment="Left" Margin="5,4,0,0" Grid.Row="3" VerticalAlignment="Top" Width="78" Height="28" Click="btnCancel_Click" IsCancel="True" FontSize="14">Cancel</Button>
+        <Button x:Name="btnBreak" Content="Break" Grid.Column="1" HorizontalAlignment="Left" Margin="12,4,0,0" Grid.Row="3" VerticalAlignment="Top" Width="78" Height="28
+                " FontSize="14" Click="btnBreak_Click"/>
 
 
 
