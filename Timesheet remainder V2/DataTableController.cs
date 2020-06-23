@@ -6,10 +6,6 @@ namespace Timesheet_remainder
 {
     public class DataTableController
     {
-        public DataTableController()
-        {
-        }
-
         public DataTable PopulateInputTable(List<object> instanceList)
         {
             DataTable inputTable = new DataTable("inputTable1");
@@ -19,11 +15,11 @@ namespace Timesheet_remainder
             inputTable.Columns.Add("TaskDesc");
             for (int order = 0; order <= instanceList.Count - 2; order += 3)
             {
-                DataRow _task = inputTable.NewRow();
-                _task["Date"] = Convert.ToString(instanceList[order]);
-                _task["Time"] = Convert.ToString(instanceList[order + 1]);
-                _task["TaskDesc"] = Convert.ToString(instanceList[order + 2]);
-                inputTable.Rows.Add(_task);
+                DataRow task = inputTable.NewRow();
+                task["Date"] = Convert.ToString(instanceList[order]);
+                task["Time"] = Convert.ToString(instanceList[order + 1]);
+                task["TaskDesc"] = Convert.ToString(instanceList[order + 2]);
+                inputTable.Rows.Add(task);
             }
 
             return inputTable;
@@ -31,8 +27,7 @@ namespace Timesheet_remainder
 
         public DataTable SortCalcTable(DataTable inputTable)
         {
-            DataTable calcTable = new DataTable("calcTable1");
-            calcTable.Clear();
+            var calcTable = new DataTable("calcTable1");
             calcTable.Columns.Add("Date");
             calcTable.Columns.Add("Task");
             calcTable.Columns.Add("Duration");
@@ -41,25 +36,29 @@ namespace Timesheet_remainder
                 // Compare with previous row using index
                 if (inputTable.Rows[i]["Date"] == inputTable.Rows[i + 1]["Date"])
                 {
-                    DataRow _calcRow = calcTable.NewRow();
-                    _calcRow["Date"] = inputTable.Rows[i]["Date"];
-                    _calcRow["Task"] = inputTable.Rows[i]["TaskDesc"];
-                    _calcRow["Duration"] =
+                    var calcRow = calcTable.NewRow();
+                    calcRow["Date"] = inputTable.Rows[i]["Date"];
+                    calcRow["Task"] = inputTable.Rows[i]["TaskDesc"];
+                    calcRow["Duration"] =
                         (DateTime.Parse((string) inputTable.Rows[i + 1]["Time"])
-                            .Subtract(DateTime.Parse((string) inputTable.Rows[i]["Time"]))).TotalMinutes;
-                    calcTable.Rows.Add(_calcRow);
+                            .Subtract(DateTime.Parse((string) inputTable.Rows[i]["Time"]))
+                        ).TotalMinutes;
+                    calcTable.Rows.Add(calcRow);
                 }
             }
 
+            return SortDataTable(calcTable);
+        }
+
+        private DataTable SortDataTable(DataTable calcTable)
+        {
             //sort table in terms of date then tasks using linq
-            DataTable sortCalcTable = new DataTable();
-            sortCalcTable.Clear();
-            sortCalcTable = calcTable.AsEnumerable()
+            var sortedCalcTable = calcTable.AsEnumerable()
                 .OrderBy(r => r.Field<string>("Date"))
                 .ThenBy(r => r.Field<string>("Task"))
                 .CopyToDataTable();
-            sortCalcTable.TableName = "sortCalcTable1";
-            return sortCalcTable;
+            sortedCalcTable.TableName = "SortedCalcTable";
+            return sortedCalcTable;
         }
 
         public DataTable PopulateOutputTable(DataTable sortCalcTable)
@@ -73,49 +72,43 @@ namespace Timesheet_remainder
             outTable.Columns.Add("TotalDuration", typeof(int));
 
             //generate rows with unique tasks each 
-            DataRow _outRow1st = outTable.NewRow();
-            _outRow1st["Date"] = sortCalcTable.Rows[0]["Date"];
-            _outRow1st["Task"] = sortCalcTable.Rows[0]["Task"];
-            _outRow1st["TotalDuration"] = 0;
-            outTable.Rows.Add(_outRow1st);
+            DataRow outRowInitial = outTable.NewRow();
+            outRowInitial["Date"] = sortCalcTable.Rows[0]["Date"];
+            outRowInitial["Task"] = sortCalcTable.Rows[0]["Task"];
+            outRowInitial["TotalDuration"] = 0;
+            outTable.Rows.Add(outRowInitial);
             //int j = 0; //iterator for outtable
-            int sum = 0;
-            TimeSpan ts;
             for (int i = 0; i < sortCalcTable.Rows.Count; i++) //iterator for sortCalctable
             {
-                if (sortCalcTable.Rows[i]["Date"] == outTable.Rows[outTable.Rows.Count - 1]["Date"])
+                if (sortCalcTable.Rows[i]["Date"] == outTable.Rows[outTable.Rows.Count - 1]["Date"]
+                    && sortCalcTable.Rows[i]["Task"] != outTable.Rows[outTable.Rows.Count - 1]["Task"])
                 {
-                    if (sortCalcTable.Rows[i]["Task"] != outTable.Rows[outTable.Rows.Count - 1]["Task"])
-                    {
-                        DataRow _outRow = outTable.NewRow();
-                        _outRow["Date"] = sortCalcTable.Rows[i]["Date"];
-                        _outRow["Task"] = sortCalcTable.Rows[i]["Task"];
-                        _outRow["TotalDuration"] = 0;
-                        _outRow["TotalTime"] = 0;
-                        outTable.Rows.Add(_outRow);
-                    }
+                    DataRow outRow = outTable.NewRow();
+                    outRow["Date"] = sortCalcTable.Rows[i]["Date"];
+                    outRow["Task"] = sortCalcTable.Rows[i]["Task"];
+                    outRow["TotalDuration"] = 0;
+                    outRow["TotalTime"] = 0;
+                    outTable.Rows.Add(outRow);
                 }
                 else
                 {
-                    DataRow _outRow = outTable.NewRow();
-                    _outRow["Date"] = sortCalcTable.Rows[i]["Date"];
-                    _outRow["Task"] = sortCalcTable.Rows[i]["Task"];
-                    _outRow["TotalDuration"] = 0;
-                    _outRow["TotalTime"] = 0;
-                    outTable.Rows.Add(_outRow);
+                    DataRow outRow = outTable.NewRow();
+                    outRow["Date"] = sortCalcTable.Rows[i]["Date"];
+                    outRow["Task"] = sortCalcTable.Rows[i]["Task"];
+                    outRow["TotalDuration"] = 0;
+                    outRow["TotalTime"] = 0;
+                    outTable.Rows.Add(outRow);
                 }
 
                 if (sortCalcTable.Rows[i]["Date"] == outTable.Rows[outTable.Rows.Count - 1]["Date"]
                     && sortCalcTable.Rows[i]["Task"] == outTable.Rows[outTable.Rows.Count - 1]["Task"])
                 {
-                    sum = Convert.ToInt32(outTable.Rows[outTable.Rows.Count - 1]["TotalDuration"])
-                          + Convert.ToInt32(sortCalcTable.Rows[i]["Duration"]);
-                    ts = TimeSpan.FromMinutes(sum);
-                    DataRow _outRow = outTable.Rows[outTable.Rows.Count - 1];
-                    _outRow["TotalDuration"] = sum;
-                    _outRow["TotalTime"] = ts.ToString("hh\\:mm");
-
-                    sum = 0;
+                    var sum = Convert.ToInt32(outTable.Rows[outTable.Rows.Count - 1]["TotalDuration"])
+                              + Convert.ToInt32(sortCalcTable.Rows[i]["Duration"]);
+                    var ts = TimeSpan.FromMinutes(sum);
+                    DataRow outRow = outTable.Rows[outTable.Rows.Count - 1];
+                    outRow["TotalDuration"] = sum;
+                    outRow["TotalTime"] = ts.ToString("hh\\:mm");
                 }
             }
 
