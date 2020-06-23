@@ -97,7 +97,7 @@ namespace Timesheet_remainder
         private void NewTimer()
         {
             var timer = new System.Timers.Timer();
-            const int intervalSeconds = 1 * 1000;
+            const int intervalSeconds = 20 * 1000;
             timer.Interval = intervalSeconds;
             timer.Elapsed += TimedEvents;
             timer.AutoReset = true;
@@ -116,7 +116,7 @@ namespace Timesheet_remainder
 
         private void UpdateTimes()
         {
-            sheetDate.Text = DateTime.Now.ToString("dd/MM/yy HH:mm:ss");
+            sheetDate.Text = DateTime.Now.ToString("dd/MM/yy    HH:mm");
             _sheetDateTime = DateTime.Now;
         }
 
@@ -135,8 +135,6 @@ namespace Timesheet_remainder
                         $"timed popup triggered at Time = {currentTime.Minute}, counter = {_popupCounter}";
                     Console.WriteLine(debugString);
                 }
-
-                //Console.WriteLine(counter.ToString()); //debug output for 
             }
             else
             {
@@ -249,13 +247,13 @@ namespace Timesheet_remainder
                 statusMsg.Text = "Invalid operation";
             }
         }
-        #endregion
 
         private void ComboBoxTaskInput_DropDownOpened(object sender, EventArgs e)
         {
             var comboBoxTaskInputController = new ComboBoxTaskInputController(ComboBoxTaskInput);
             comboBoxTaskInputController.PopulateDropDownBox();
         }
+        #endregion
     }
 }
 
