@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Windows;
+using System.Windows.Controls;
 
 
 namespace Timesheet_remainder
@@ -73,13 +74,7 @@ namespace Timesheet_remainder
                         instanceList.Add(wsTimes.Cells[row, 3].Value);
                     }
 
-                    var inputTable = _dataTableController.PopulateInputTable(instanceList);
-
-                    var sortCalcTable = _dataTableController.SortCalcTable(inputTable);
-                    //sortCalcTable.WriteXml(@"C:\Users\Ben\Desktop\Timesheet test\calcTest\calcTable.xml");
-
-                    var outTable = _dataTableController.PopulateOutputTable(sortCalcTable);
-                    //outTable.WriteXml(@"C:\Users\Ben\Desktop\Timesheet test\calcTest\outTable.xml");
+                    var outTable = new DataTableController().GetOutputDataTable(instanceList);
 
                     //export datatable to excel sheet
                     var wsCalc = excelPackage.Workbook.Worksheets.Add("Calculated_Times");
@@ -223,7 +218,8 @@ namespace Timesheet_remainder
             {
                 try
                 {
-                    _excelController.AddNewEntryToWorkSheet(_fileLoadPath, _sheetDateTime, txtTaskInput.Text);
+                    _excelController.AddNewEntryToWorkSheet(_fileLoadPath, _sheetDateTime, ComboBoxTaskInput.Text);
+                    DropDownListModel.AddToDropDownList(ComboBoxTaskInput.Text);
                     statusMsg.Text = string.Empty;
                     this.WindowState = WindowState.Minimized;
                 }
@@ -255,6 +251,11 @@ namespace Timesheet_remainder
         }
         #endregion
 
+        private void ComboBoxTaskInput_DropDownOpened(object sender, EventArgs e)
+        {
+            var comboBoxTaskInputController = new ComboBoxTaskInputController(ComboBoxTaskInput);
+            comboBoxTaskInputController.PopulateDropDownBox();
+        }
     }
 }
 

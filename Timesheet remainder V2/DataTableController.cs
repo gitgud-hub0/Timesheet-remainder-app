@@ -6,7 +6,20 @@ namespace Timesheet_remainder
 {
     public class DataTableController
     {
-        public DataTable PopulateInputTable(List<object> instanceList)
+        public DataTable GetOutputDataTable(List<object> instanceList)
+        {
+            var inputTable = PopulateInputTable(instanceList);
+
+            var sortCalcTable = SortCalcTable(inputTable);
+            //sortCalcTable.WriteXml(@"C:\Users\Ben\Desktop\Timesheet test\calcTest\calcTable.xml");
+
+            var outTable = PopulateOutputTable(sortCalcTable);
+            //outTable.WriteXml(@"C:\Users\Ben\Desktop\Timesheet test\calcTest\outTable.xml");
+
+            return outTable;
+        }
+
+        private DataTable PopulateInputTable(List<object> instanceList)
         {
             DataTable inputTable = new DataTable("inputTable1");
             inputTable.Clear();
@@ -25,7 +38,7 @@ namespace Timesheet_remainder
             return inputTable;
         }
 
-        public DataTable SortCalcTable(DataTable inputTable)
+        private DataTable SortCalcTable(DataTable inputTable)
         {
             var calcTable = new DataTable("calcTable1");
             calcTable.Columns.Add("Date");
@@ -61,7 +74,7 @@ namespace Timesheet_remainder
             return sortedCalcTable;
         }
 
-        public DataTable PopulateOutputTable(DataTable sortCalcTable)
+        private DataTable PopulateOutputTable(DataTable sortCalcTable)
         {
             //output table
             DataTable outTable = new DataTable("OutputTable1");

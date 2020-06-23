@@ -6,6 +6,9 @@ namespace Timesheet_remainder
 {
     public class ExcelController
     {
+        private const string DateEntryFormat = "dd/MM/yy";
+        private const string TimeEntryFormat = "HH:mm";
+
         public void NewExcelFile(string fileLoadPath)
         {
             var fileInfoPath = new FileInfo(fileLoadPath);
@@ -27,9 +30,9 @@ namespace Timesheet_remainder
                 var lastRow = worksheet.Dimension.End.Row;
 
                 //Set the next last cell in the row to sheetDate.Text
-                worksheet.Cells[lastRow + 1, 1].Value = sheetDateTime.ToString("dd/MM/yy");
+                worksheet.Cells[lastRow + 1, 1].Value = sheetDateTime.ToString(DateEntryFormat);
                 //Set the next last cell in the row to txtTaskInput.Text;
-                worksheet.Cells[lastRow + 1, 2].Value = sheetDateTime.ToString("HH:mm:ss");
+                worksheet.Cells[lastRow + 1, 2].Value = sheetDateTime.ToString(TimeEntryFormat);
                 worksheet.Cells[lastRow + 1, 3].Value = TaskInputText;
 
                 excelPackage.Save();
