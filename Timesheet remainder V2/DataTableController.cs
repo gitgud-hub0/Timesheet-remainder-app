@@ -11,10 +11,12 @@ namespace Timesheet_remainder
             var inputTable = PopulateInputTable(instanceList);
 
             var sortCalcTable = SortCalcTable(inputTable);
-            sortCalcTable.WriteXml(@"C:\Users\Ben\Desktop\Timesheet test\calcTest\calcTable.xml");
+            //debug only
+            //sortCalcTable.WriteXml(@"C:\Users\Ben\Desktop\Timesheet test\calcTest\calcTable.xml");
 
             var outTable = PopulateOutputTable(sortCalcTable);
-            outTable.WriteXml(@"C:\Users\Ben\Desktop\Timesheet test\calcTest\outTable.xml");
+            //debug only
+            //outTable.WriteXml(@"C:\Users\Ben\Desktop\Timesheet test\calcTest\outTable.xml");
 
             return outTable;
         }
